@@ -1,0 +1,64 @@
+# .NET
+bin/
+obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Visual Studio
+.vs/
+
+# Build Results
+[Dd]ebug/
+[Rr]elease/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Rider
+.idea/
+*.sln.iml
+
+# User-specific files
+*.swp
+*.bak
+*.tmp
+*.log
+
+# NuGet
+*.nupkg
+# The packages folder can be ignored because of Package Restore
+**/packages/*
+!**/packages/build/
+!**/packages/repositories.config
+
+# Others
+*.dbmdl
+*.pdb
+*.cache
+*.zip
+*.7z
+*.tar.gz
+*.tar
+*.gz
+*.rar
+*.tgz
+*.xz
+*.exe
+*.dll
+*.msi
+*.app
+*.iso
+*.jar
+*.class
+*.war
+*.ear
+*.iml
+*.ipr
+*.iws
+*.sublime-workspace
+*.sublime-project
+*.sublime-settings
+*.vscode/ 
