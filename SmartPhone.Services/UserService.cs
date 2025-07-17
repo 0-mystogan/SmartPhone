@@ -2,12 +2,14 @@ using SmartPhone.Model;
 using SmartPhone.Services.Database;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNetCore.Identity;
 
 namespace SmartPhone.Services
 {
     public class UserService : IUserService
     {
         private readonly AppDbContext _context;
+        private readonly PasswordHasher<User> _passwordHasher = new PasswordHasher<User>();
         public UserService(AppDbContext context)
         {
             _context = context;
@@ -53,11 +55,12 @@ namespace SmartPhone.Services
                 FirstName = request.FirstName,
                 LastName = request.LastName,
                 Email = request.Email,
-                PasswordHash = request.Password, // In production, hash the password!
                 PhoneNumber = request.PhoneNumber,
                 Address = request.Address,
                 CreatedAt = System.DateTime.UtcNow
             };
+            // Hash the password using PBKDF2
+            user.PasswordHash = _passwordHasher.HashPassword(user, request.Password);
             _context.Users.Add(user);
             _context.SaveChanges();
             return new UserRespond
@@ -83,7 +86,8 @@ namespace SmartPhone.Services
             user.FirstName = request.FirstName;
             user.LastName = request.LastName;
             user.Email = request.Email;
-            user.PasswordHash = request.Password; // In production, hash the password!
+            // Hash the password using PBKDF2
+            user.PasswordHash = _passwordHasher.HashPassword(user, request.Password);
             user.PhoneNumber = request.PhoneNumber;
             user.Address = request.Address;
             _context.SaveChanges();
@@ -97,6 +101,13 @@ namespace SmartPhone.Services
             _context.Users.Remove(user);
             _context.SaveChanges();
             return true;
+        }
+
+        // Optional: Add a method to verify passwords
+        public bool VerifyPassword(User user, string password)
+        {
+            var result = _passwordHasher.VerifyHashedPassword(user, user.PasswordHash, password);
+            return result == PasswordVerificationResult.Success;
         }
     }
 } 
